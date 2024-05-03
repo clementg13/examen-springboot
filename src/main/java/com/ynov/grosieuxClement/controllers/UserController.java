@@ -59,4 +59,21 @@ public class UserController {
                 HttpStatus.OK
         );
     }
+
+    @PostMapping("validate/{code}")
+    public ResponseEntity<?> validate(@PathVariable String code){
+        Optional<User> user = userService.getUserByValidationCode(code);
+        if (user.isEmpty())
+            return new ResponseEntity<>(
+                    "Code invalide",
+                    HttpStatus.NOT_FOUND
+            );
+        user.get().setCode(0);
+        user.get().setValid(true);
+        userService.createUser(user.get());
+        return new ResponseEntity<>(
+                "Compte validé",
+                HttpStatus.OK
+        );
+    }
 }

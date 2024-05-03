@@ -3,6 +3,7 @@ package com.ynov.grosieuxClement.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,11 +27,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( registry -> {
                     registry
-                            .requestMatchers("/admin/signup").permitAll()
-                            .requestMatchers("/admin/login").permitAll()
-//                            .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                            .anyRequest().permitAll();
-//                            .authenticated();
+                            .requestMatchers(HttpMethod.POST, "/admin/login", "/admin/register").permitAll()
+                            .requestMatchers("/**").permitAll().anyRequest().authenticated();
                 })
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 public class AuthImplem implements AuthService {
     @Autowired
@@ -50,6 +52,17 @@ public class AuthImplem implements AuthService {
     public User registerUser(User entity, Role role) {
         String passwordEncoded = bCryptPasswordEncoder.encode(entity.getPassword());
         entity.setPassword(passwordEncoded);
+        // setCode a random code by random
+        Random rand = new Random();
+        int chiffreAleatoire = 0;
+
+        for (int i = 0; i < 8; i++) {
+            // Générer un chiffre aléatoire entre 0 et 9
+            int chiffre = rand.nextInt(10);
+            // Multiplier le chiffre généré par la puissance de 10 correspondante
+            chiffreAleatoire = chiffreAleatoire * 10 + chiffre;
+        }
+        entity.setCode(chiffreAleatoire);
         userService.addRoleToUser(entity, role);
         return userService.createUser(entity);
     }

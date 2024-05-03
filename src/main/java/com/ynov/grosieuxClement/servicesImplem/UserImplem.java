@@ -65,5 +65,13 @@ public class UserImplem implements UserService {
         return userRepo.save(userToUpdate);
     }
 
+    @Override
+    public Optional<User> getUserByValidationCode(String code) {
+        // convert code to int
+        int codeInt = Integer.parseInt(code);
+        return userRepo.findByCode(codeInt);
+
+    }
+
 
 }

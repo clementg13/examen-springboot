@@ -36,7 +36,11 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    boolean Valid = false;
+
+    private int code;
+
+    @OneToMany(mappedBy = "user")
     private List<Article> stock = new ArrayList<>();
 
     public void addRole(Role role) {

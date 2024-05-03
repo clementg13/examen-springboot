@@ -1,5 +1,8 @@
 package com.ynov.grosieuxClement.config;
 
+import com.ynov.grosieuxClement.models.Admin;
+import com.ynov.grosieuxClement.models.User;
+import com.ynov.grosieuxClement.repositories.AdminRepo;
 import com.ynov.grosieuxClement.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,15 +13,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Optional;
+
 @Configuration
 public class applicationConfig {
     @Autowired
-    UserRepo repository;
+    UserRepo userRepo;
+
+    @Autowired
+    AdminRepo adminRepo;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            System.out.println("Username: " + username); // Affiche le username dans la console
+            Optional<User> user = userRepo.findByEmail(username);
+            if (user.isPresent()) {
+                return user.get();
+            }
+            Optional<Admin> admin = adminRepo.findByEmail(username);
+            if (admin.isPresent()) {
+                return admin.get();
+            }
+
+            throw new UsernameNotFoundException("User not found");
+        };
     }
 
     @Bean

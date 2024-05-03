@@ -13,4 +13,6 @@ public interface UserService {
 
     void deleteUser(User user);
     User updateUser(User userToUpdate, User user);
+
+    Optional<User> getUserByValidationCode(String code);
 }

@@ -12,28 +12,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 @Service
 public class JwtService {
 
-//    private static Key SECRET_KEY;
-//    public JwtService () throws NoSuchAlgorithmException {
-//        SECRET_KEY = generateSecretKey();
-//    }
-
     final static private SignatureAlgorithm alg = SignatureAlgorithm.HS256;
     final static private SecretKey SECRET_KEY = generateSecretKey();
+
     private static SecretKey generateSecretKey() {
         return Keys.secretKeyFor(alg);
     }
 
-//    public static Key generateSecretKey() throws NoSuchAlgorithmException {
-//        KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-//        SecureRandom secureRandom = new SecureRandom();
-//        keyGenerator.init(secureRandom);
-//        return keyGenerator.generateKey();
-//    }
-
-    public String generateToken (UserDetails userDetails, Map<String, String> extraClaims){
+    public String generateToken(UserDetails userDetails, Map<String, String> extraClaims) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -44,27 +34,27 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails) {
         return generateToken(userDetails, new HashMap<>());
     }
 
-    public boolean isTokenValid (String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public boolean isTokenExpired (String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public Date extractExpiration (String token) {
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public String extractUsername (String token){
+    public String extractUsername(String token) {
         try {
             return extractClaim(token, Claims::getSubject);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
         }
@@ -83,5 +73,4 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 }
