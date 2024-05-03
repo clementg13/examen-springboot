@@ -1,0 +1,13 @@
+package com.ynov.grosieuxClement;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class GrosieuxClementApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(GrosieuxClementApplication.class, args);
+	}
+
+}
