@@ -8,4 +8,9 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> getUserByEmail(String email);
     void addRoleToUser(User user, Role role);
+    User createUser(User entity);
+    Optional<User> getUserById(Long id);
+
+    void deleteUser(User user);
+    User updateUser(User userToUpdate, User user);
 }

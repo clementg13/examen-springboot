@@ -19,6 +19,9 @@ public class AuthImplem implements AuthService {
     AdminService adminService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     JwtService jwtService;
 
     @Override
@@ -29,11 +32,25 @@ public class AuthImplem implements AuthService {
         return adminService.createAdmin(entity);
     }
 
-//    @Override
-//    public User register(User entity, Role role) {
-//        String passwordEncoded = bCryptPasswordEncoder.encode(entity.getPassword());
-//        entity.setPassword(passwordEncoded);
-//        userService.addRoleToUser(entity, role);
-//        return userService.createUser(entity);
-//    }
+    @Override
+    public String loginAdmin(Admin entity, String password) {
+        if(bCryptPasswordEncoder.matches(password, entity.getPassword()))
+            return jwtService.generateToken(entity);
+        return null;
+    }
+
+    @Override
+    public String loginUser(User user, String password) {
+        if(bCryptPasswordEncoder.matches(password, user.getPassword()))
+            return jwtService.generateToken(user);
+        return null;
+    }
+
+    @Override
+    public User registerUser(User entity, Role role) {
+        String passwordEncoded = bCryptPasswordEncoder.encode(entity.getPassword());
+        entity.setPassword(passwordEncoded);
+        userService.addRoleToUser(entity, role);
+        return userService.createUser(entity);
+    }
 }

@@ -17,7 +17,7 @@ public class AdminImplem implements AdminService {
 
     @Override
     public Optional<Admin> getAdminByEmail(String email) {
-        return Optional.empty();
+        return adminRepo.findByEmail(email);
     }
 
     @Override

@@ -26,10 +26,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( registry -> {
                     registry
-                            .requestMatchers("/admin/**")
-                            .permitAll()
-                            .anyRequest()
-                            .authenticated();
+                            .requestMatchers("/admin/signup").permitAll()
+                            .requestMatchers("/admin/login").permitAll()
+//                            .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                            .anyRequest().permitAll();
+//                            .authenticated();
                 })
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)

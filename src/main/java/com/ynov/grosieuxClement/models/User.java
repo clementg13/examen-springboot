@@ -1,6 +1,9 @@
 package com.ynov.grosieuxClement.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,18 +17,21 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Le mot de passe est obligatoire")
     private String password;
 
-    private String fullname;
-
+    @Email(message = "L'email doit être une adresse email valide")
+    @NotBlank(message = "L'email est obligatoire")
     private String email;
+
+    @NotNull(message = "Le nom complet est obligatoire")
+    private String fullname;
 
     @ManyToMany(fetch = FetchType.EAGER)
     List<Role> roles = new ArrayList<>();
